@@ -8,16 +8,18 @@ use ApiPlatform\Metadata\Delete;
 use App\Repository\IngredientRepository;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: IngredientRepository::class)]
 #[ApiResource(
-    order : ["nom" => "ASC"],
+    order: ["nom" => "ASC"],
     operations: [
         new Get(),
         new Post(),
         new Delete(),
+        new GetCollection()
     ],
     normalizationContext: ["groups" => ["ingredient:read"]]
 )]
@@ -26,12 +28,13 @@ class Ingredient
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["ingredientRecette:read", "ingredient:read"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotNull]
     #[Assert\NotBlank]
-    #[Groups(["ingredientRecette:read"])]
+    #[Groups(["ingredientRecette:read", "ingredient:read"])]
     private ?string $nom = null;
 
     public function getId(): ?int

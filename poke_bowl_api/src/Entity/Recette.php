@@ -13,6 +13,7 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\RecetteRepository;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
+use App\State\RecetteProcessor;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -24,7 +25,9 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new Get(),
         new GetCollection(),
-        new Post(),
+        new Post(
+            processor: RecetteProcessor::class
+        ),
         new Delete(),
         new GetCollection(
             uriTemplate: '/recettes/{idUtilisateur}/utilisateur',
@@ -43,32 +46,45 @@ class Recette
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["ingredientRecette:read", "recette:read"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotNull]
     #[Assert\NotBlank]
-    #[Groups(["ingredientRecette:read"])]
+    #[Groups(["ingredientRecette:read", "recette:read"])]
     private ?string $nom = null;
 
     #[ORM\OneToMany(mappedBy: 'ingredient', targetEntity: IngredientRecette::class, orphanRemoval: true)]
     private Collection $ingredients;
 
     #[ORM\Column]
-    #[ApiProperty(writable : false)]
-    #[Groups(["ingredientRecette:read"])]
+    #[ApiProperty(writable: false)]
+    #[Groups(["ingredientRecette:read", "recette:read"])]
     private bool $recommande = false;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[ApiProperty(writable : false)]
-    #[Groups(["ingredientRecette:read"])]
+    #[ApiProperty(writable: false)]
+    #[Groups(["ingredientRecette:read", "recette:read"])]
     private ?\DateTimeInterface $date = null;
 
     #[ORM\ManyToOne(inversedBy: 'recettes', fetch: 'EAGER')]
     #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
     // #[ApiProperty(writable: false)]
-    #[Groups(["ingredientRecette:read"])]
+    #[Groups(["ingredientRecette:read", "recette:read"])]
     private ?Utilisateur $auteur = null;
+
+    #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotNull]
+    #[Assert\NotBlank]
+    #[Groups(["ingredientRecette:read", "recette:read"])]
+    private ?string $etapes = null;
+
+    #[ORM\Column]
+    #[Assert\NotNull]
+    #[Assert\NotBlank]
+    #[Groups(["ingredientRecette:read", "recette:read"])]
+    private ?int $tempsPreparation = null;
 
     public function __construct()
     {
@@ -135,7 +151,8 @@ class Recette
     }
 
     #[ORM\PrePersist]
-    public function prePersistDate() : void {
+    public function prePersistDate(): void
+    {
         $this->date = new \DateTime();
     }
 
@@ -159,6 +176,30 @@ class Recette
     public function setAuteur(?Utilisateur $auteur): static
     {
         $this->auteur = $auteur;
+
+        return $this;
+    }
+
+    public function getEtapes(): ?string
+    {
+        return $this->etapes;
+    }
+
+    public function setEtapes(string $etapes): static
+    {
+        $this->etapes = $etapes;
+
+        return $this;
+    }
+
+    public function getTempsPreparation(): ?int
+    {
+        return $this->tempsPreparation;
+    }
+
+    public function setTempsPreparation(int $tempsPreparation): static
+    {
+        $this->tempsPreparation = $tempsPreparation;
 
         return $this;
     }
