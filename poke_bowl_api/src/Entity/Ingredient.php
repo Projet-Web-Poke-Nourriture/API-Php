@@ -28,13 +28,13 @@ class Ingredient
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["ingredientRecette:read", "ingredient:read"])]
+    #[Groups(["ingredient:read", "ingredientRecette:read", "recette:read"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotNull]
     #[Assert\NotBlank]
-    #[Groups(["ingredientRecette:read", "ingredient:read"])]
+    #[Groups(["ingredient:read", "ingredientRecette:read", "recette:read"])]
     private ?string $nom = null;
 
     public function getId(): ?int

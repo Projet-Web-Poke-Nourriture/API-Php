@@ -44,7 +44,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['utilisateur:read', 'ingredientRecette:read', 'utilisateur:create', 'utilisateur:update'])]
+    #[Groups(['utilisateur:read', 'ingredientRecette:read', 'utilisateur:create', 'utilisateur:update', "recette:read"])]
     private ?int $id = null;
 
     #[Assert\NotBlank(groups: ["utilisateur:create"])]
@@ -56,12 +56,12 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         maxMessage: 'Votre login est trop long ! (+20 caractères)'
     )]
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(["ingredientRecette:read", "utilisateur:read", "utilisateur:create"])]
+    #[Groups(["ingredientRecette:read", "utilisateur:read", "utilisateur:create", "recette:read"])]
     private ?string $login = null;
 
     #[ORM\Column]
     #[ApiProperty(writable : false)]
-    #[Groups(["ingredientRecette:read", "utilisateur:read", "utilisateur:create"])]
+    #[Groups(["ingredientRecette:read", "utilisateur:read", "utilisateur:create", "recette:read"])]
     private array $roles = [];
     
     /**
@@ -87,12 +87,12 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotNull(groups: ["utilisateur:create"])]
     #[Assert\Email(message: "L'adresse email {{ value }} n'est pas valide.")]
     #[ORM\Column(length: 255, unique: true)]
-    #[Groups(["ingredientRecette:read", "utilisateur:read", "utilisateur:create", "utilisateur:update"])]
+    #[Groups(["ingredientRecette:read", "utilisateur:read", "utilisateur:create", "utilisateur:update", "recette:read"])]
     private ?string $adresseEmail = null;
 
     #[ORM\Column]
     #[ApiProperty(writable : false)]
-    #[Groups(["ingredientRecette:read", "utilisateur:read"])]
+    #[Groups(["ingredientRecette:read", "utilisateur:read", "recette:read"])]
     private bool $premium = false;
 
     #[ORM\OneToMany(mappedBy: 'auteur', targetEntity: Recette::class, orphanRemoval: true)]

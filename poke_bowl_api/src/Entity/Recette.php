@@ -37,35 +37,36 @@ use Symfony\Component\Validator\Constraints as Assert;
                     fromClass: Utilisateur::class
                 )
             ]
-        )
+        ),
     ],
-    normalizationContext: ["groups" => ["recette:read", "ingredientRecette:read"]]
+    normalizationContext: ["groups" => ["recette:read"]]
 )]
 class Recette
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["ingredientRecette:read", "recette:read"])]
+    #[Groups(["recette:read"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotNull]
     #[Assert\NotBlank]
-    #[Groups(["ingredientRecette:read", "recette:read"])]
+    #[Groups(["recette:read"])]
     private ?string $nom = null;
 
-    #[ORM\OneToMany(mappedBy: 'ingredient', targetEntity: IngredientRecette::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'recette', targetEntity: IngredientRecette::class, orphanRemoval: true, fetch: 'EAGER')]
+    #[Groups(["ingredientRecette:read", "recette:read"])]
     private Collection $ingredients;
 
     #[ORM\Column]
     #[ApiProperty(writable: false)]
-    #[Groups(["ingredientRecette:read", "recette:read"])]
+    #[Groups(["recette:read"])]
     private bool $recommande = false;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[ApiProperty(writable: false)]
-    #[Groups(["ingredientRecette:read", "recette:read"])]
+    #[Groups(["recette:read"])]
     private ?\DateTimeInterface $date = null;
 
     #[ORM\ManyToOne(inversedBy: 'recettes', fetch: 'EAGER')]
@@ -77,13 +78,13 @@ class Recette
     #[ORM\Column(type: Types::TEXT)]
     #[Assert\NotNull]
     #[Assert\NotBlank]
-    #[Groups(["ingredientRecette:read", "recette:read"])]
+    #[Groups(["recette:read"])]
     private ?string $etapes = null;
 
     #[ORM\Column]
     #[Assert\NotNull]
     #[Assert\NotBlank]
-    #[Groups(["ingredientRecette:read", "recette:read"])]
+    #[Groups(["recette:read"])]
     private ?int $tempsPreparation = null;
 
     public function __construct()

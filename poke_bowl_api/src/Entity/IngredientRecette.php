@@ -32,13 +32,14 @@ class IngredientRecette
     #[ORM\ManyToOne(fetch: "EAGER")]
     #[ORM\JoinColumn(nullable: false)]
     private ?Recette $recette = null;
-    
-    #[Groups(["ingredientRecette:read"])]
+
+    #[Groups(["ingredientRecette:read", "recette:read"])]
     #[ORM\ManyToOne(fetch: "EAGER")]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Ingredient $ingredient = null; 
+    private ?Ingredient $ingredient = null;
 
     #[ORM\Column]
+    #[Groups(["ingredientRecette:read"])]
     private ?int $quantite = null;
 
     public function getId(): ?int
