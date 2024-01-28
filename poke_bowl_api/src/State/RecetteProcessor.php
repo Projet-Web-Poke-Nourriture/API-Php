@@ -14,24 +14,23 @@ class RecetteProcessor implements ProcessorInterface
         #[Autowire(service: 'api_platform.doctrine.orm.state.persist_processor')]
         private ProcessorInterface $persistProcessor,
         private Security $security
-    )
-    {}
+    ) {
+    }
 
     /**
      * Fonction permettant de savoir si un utilisateur peut poster une recette
      */
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): void
     {
-        // if($data != null){
-        //     $recette = $data;
+        if ($data != null) {
+            $recette = $data;
 
-        //     if($this->security->getUser()->isPremium() || !$this->security->getUser()->isPremium() && count($this->security->getUser()->getRecettes()) < 10){
-        //         // on récupère l'objet Utilisateur lié a l'identifiant de la personne connectée
-        //         $recette->setAuteur($this->security->getUser());
-        //     }
-            
-        // }
+            if ($this->security->getUser()->isPremium() || !$this->security->getUser()->isPremium() && count($this->security->getUser()->getRecettes()) < 10) {
+                // on récupère l'objet Utilisateur lié a l'identifiant de la personne connectée
+                $recette->setAuteur($this->security->getUser());
+            }
+        }
         // //Sauvegarde en base
-        // $this->persistProcessor->process($data, $operation, $uriVariables, $context);
+        $this->persistProcessor->process($data, $operation, $uriVariables, $context);
     }
 }

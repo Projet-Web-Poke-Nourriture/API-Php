@@ -26,7 +26,8 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Get(),
         new GetCollection(),
         new Post(
-            processor: RecetteProcessor::class
+            processor: RecetteProcessor::class,
+            security: "is_granted('ROLE_USER')"
         ),
         new Delete(),
         new GetCollection(
@@ -71,7 +72,7 @@ class Recette
 
     #[ORM\ManyToOne(inversedBy: 'recettes', fetch: 'EAGER')]
     #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")]
-    // #[ApiProperty(writable: false)]
+    #[ApiProperty(writable: false)]
     #[Groups(["ingredientRecette:read", "recette:read"])]
     private ?Utilisateur $auteur = null;
 
