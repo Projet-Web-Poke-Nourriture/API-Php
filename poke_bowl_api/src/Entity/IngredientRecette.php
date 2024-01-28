@@ -6,16 +6,12 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use App\Repository\IngredientRecetteRepository;
 use Doctrine\ORM\Mapping as ORM;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: IngredientRecetteRepository::class)]
 #[ApiResource(
     operations: [
-        new Get(),
-        new GetCollection(),
         new Post(),
         new Delete(),
     ],
