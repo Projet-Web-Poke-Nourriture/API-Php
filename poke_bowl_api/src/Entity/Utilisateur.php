@@ -16,6 +16,7 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use App\State\UtilisateurProcessor;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -35,7 +36,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
             processor: UtilisateurProcessor::class, 
             validationContext: ["groups" => ["Default", "utilisateur:update"]], 
             denormalizationContext: ["groups" => ["utilisateur:update"]]
-        )
+        ),
+        new GetCollection(security: "is_granted('ROLE_ADMIN')")
     ],
     normalizationContext: ["groups" => ["ingredientRecette:read", "utilisateur:read"]]
 )]

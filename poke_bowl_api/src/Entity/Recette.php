@@ -13,6 +13,7 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\RecetteRepository;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
+use App\State\RecetteDeleteProcessor;
 use App\State\RecetteProcessor;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -29,7 +30,10 @@ use Symfony\Component\Validator\Constraints as Assert;
             processor: RecetteProcessor::class,
             security: "is_granted('ROLE_USER')"
         ),
-        new Delete(),
+        new Delete(
+            processor: RecetteDeleteProcessor::class,
+            security: "is_granted('ROLE_ADMIN')"
+        ),
         new GetCollection(
             uriTemplate: '/recettes/{idUtilisateur}/utilisateur',
             uriVariables: [

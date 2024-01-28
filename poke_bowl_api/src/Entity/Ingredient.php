@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use App\State\IngredientProcessor;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: IngredientRepository::class)]
@@ -18,7 +19,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
     operations: [
         new Get(),
         new Post(),
-        new Delete(),
+        new Delete(
+            processor: IngredientProcessor::class,
+            security: "is_granted('ROLE_ADMIN')"
+        ),
         new GetCollection()
     ],
     normalizationContext: ["groups" => ["ingredient:read"]]

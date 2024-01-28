@@ -6,6 +6,11 @@
 parameters:
 
 services:
+    app.state_processor:
+        class: App\Processor\IngredientProcessor
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@App\Repository\IngredientRecetteRepository'
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
