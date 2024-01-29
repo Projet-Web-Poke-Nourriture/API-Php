@@ -28,6 +28,8 @@ class RecetteProcessor implements ProcessorInterface
             if ($this->security->getUser()->isPremium() || !$this->security->getUser()->isPremium() && count($this->security->getUser()->getRecettes()) < 10) {
                 // on récupère l'objet Utilisateur lié a l'identifiant de la personne connectée
                 $recette->setAuteur($this->security->getUser());
+            } else {
+                throw new \Exception("Le nombre limite de recette à été atteint", 401);
             }
         }
         // //Sauvegarde en base

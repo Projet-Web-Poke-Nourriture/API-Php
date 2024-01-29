@@ -13,7 +13,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     operations: [
         new Post(),
-        new Delete(),
     ],
     normalizationContext: ["groups" => ["ingredientRecette:read"]]
 )]
